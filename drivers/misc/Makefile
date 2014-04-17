@@ -68,4 +68,8 @@ obj-$(CONFIG_TI_DRV2667) += ti_drv2667.o
 obj-$(CONFIG_QPNP_MISC) += qpnp-misc.o
 obj-$(CONFIG_QCOM_LIQUID_DOCK)	+= qcom_liquid_dock.o
 obj-y				+= qcom/
-obj-$(CONFIG_SIMPLE_OVERLAY_LOADER)	+= ovloader.o
+obj-$(CONFIG_ALSA_TO_H2W) += alsa-to-h2w-headset.o
+obj-$(CONFIG_MOT_UTAG) += utag/
+obj-$(CONFIG_MMI_FACTORY) += mmi-factory.o
+obj-$(CONFIG_DROPBOX) += dropbox.o
+
