@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# Our settings
+
+#Let's make sure the environment is clean and ready to compile the kernel
+echo
+echo "Cleaning house!!"
+echo
+rm -rf ../modules/*.ko
+rm arch/arm/boot/zImage-dtb
+rm -f ../boot.img
+rm -f ../kernel
+echo
+echo "House cleaned, lets build a kernel!!!"
+echo
+#
+# Lets set the kernel defconfig
+#
+# Let's build a kernel
+echo
+echo "Now compiling kernel, go get a soda! ;)"
+echo
+ARCH=arm CROSS_COMPILE=~/android_prebuilt_toolchains/arm-cortex_a7-linux-gnueabihf-linaro_4.9/bin/arm-cortex_a7-linux-gnueabihf- make CONFIG_DEBUG_SECTION_MISMATCH=y -j8
+#
+if [ -f arch/arm/boot/zImage-dtb ]; then
+	  echo
+      echo "Seed has been compiled!!! You can find it in arch/arm/boot/zImage-dtb"
+	  echo
+else
+      echo
+	  echo "Kernel did not compile, please check for errors!!"
+	  echo
+fi
+
+# These move files to easier locations
+find -name '*.ko' -exec cp -av {} ../modules/ \;
+cp arch/arm/boot/zImage-dtb ../kernel
+
+# This part packs the img up :)
+#
+cd ..
+#
+echo "Now packing boot.img"
+#
+mkbootimg --base 0 --pagesize 2048 --kernel_offset 0x80008000 --ramdisk_offset 0x81000000 --second_offset 0x80f00000 --tags_offset 0x80000100 --cmdline 'console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=seed user_debug=30 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 buildvariant=user' --kernel kernel --ramdisk ramdisk.cpio.gz -o boot.img
+#
+#
+if [ -f /home/jazz/AndroidONE/boot.img ]; then
+	  echo
+      echo "Successful Building Boot Image for Seed"
+	  echo
+else
+      echo
+	  echo "Kernel did not compile, please check for errors!!"
+	  echo
+fi
+
+echo "Connect phone via USB Cable"
+#
+#
+adb devices
+sleep 5
+#
+#
+echo "adb device detected"
+sleep 5
+#
+echo "rebooting to booloader"
+#
+adb reboot bootloader
+sleep 5
+#
+#
+echo "flashing boot image"
+sleep 5
+#
+fastboot flash boot ~/AndroidONE/boot.img
+sleep 5
+#
+#
+fastboot reboot
+#
+echo "flashing os boot image successful!!!"
+
+
+
