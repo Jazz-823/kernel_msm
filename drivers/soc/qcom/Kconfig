@@ -588,7 +588,7 @@ config MSM_LIMITER
 	default y
 	help
 	  The MSM Frequency Limiter Driver controls max frequency limit for each CPU
-	to desired value on suspend/resume
+	  to desired value on suspend/resume
 
 source "drivers/soc/qcom/memshare/Kconfig"
 
