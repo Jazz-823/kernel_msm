@@ -519,6 +519,12 @@ config SYNA_MULTI_TOUCH
 	depends on TOUCHSCREEN_SYNAPTICS_RMI4_I2C
 	default y
 
+config TOUCHSCREEN_SYNAPTICS_I2C_RMI
+	tristate "Synaptics i2c touchscreen"
+	depends on I2C
+	help
+	  This enables support for Synaptics RMI over I2C based touchscreens.
+
 config TOUCHSCREEN_TOUCHRIGHT
 	tristate "Touchright serial touchscreen"
 	select SERIO
